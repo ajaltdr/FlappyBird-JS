@@ -20,17 +20,15 @@ const pipeUp = new Image();
 
 const pipeHeight = 300;
 
-const gap = 80;
+const gap = 120;
 const c = pipeHeight + gap;
 
 var birdYPosition = 350;
 var birdXPosition =  600;
 
-var gravity = 1.3;
+var gravity = 1.5;
 
-function checkCollision(){
 
-}
 
 function generateBackground(){
 
@@ -79,6 +77,7 @@ pipe[0] = {
             pipeUp.src = 'img/pipe-up.png';
                 var pipeUpHeight = screenHeight - (c+120+pipe[i].y);
                 ct.drawImage(pipeUp,pipe[i].x,pipe[i].y+c,50,pipeUpHeight);
+
             
 
             // Checks if the pipe reaches the edge
@@ -92,14 +91,22 @@ pipe[0] = {
                     pipe.push({
                         x: screenRightEdge-50,
                         y: getRandom(pipeHeight) - pipeDown.height
-                    })            
+                    })  
+
+                    
+                        if (birdXPosition + 50 >= pipe[i].x && birdXPosition <= pipe[i].x + 50 && (birdYPosition <= pipe[i].y + pipeHeight || birdYPosition+40 >= pipe[i].y+c) || birdYPosition + 40 >= canvas.height-120){
+                            location.reload();
+                    
+                    }
+                             
         }
+        
     }
 
 document.addEventListener('keyup', event => {
     if (event.code === 'Space') {
-      birdYPosition -= 30;
-
+      birdYPosition -= 50;
+     
     }
   })
 
