@@ -6,3 +6,98 @@
     margin: 0;
     padding: 0;
 }
+
+canvas{
+    display: none;
+}
+
+#start-screen{
+    background-image: url("../img/bg.png");
+    background-repeat: no-repeat;
+    background-size:cover;
+    width: 500px;
+    height: 580px;
+    position: absolute;
+    background-position: center;
+    margin-left: 450px;
+    /* display: none; */
+}
+
+#flappy{
+    margin-top: 80px;
+    text-align: center;
+}
+
+#flappy-img{
+    width: 300px;
+    height: 80px;
+}
+
+#ready{
+    margin-top: 100px;
+    text-align: center;
+}
+
+#ready-img{
+    width: 260px;
+    height: 60px;
+    
+}
+
+#start-btn{
+    margin-top: 50px;
+    text-align: center;
+}
+
+#start-btn-img{
+    width: 100px;
+    height: 40px;
+}
+
+#restart-btn{
+    margin-top: 50px;
+    text-align: center;
+}
+
+#restart-btn-img{
+    width: 100px;
+    height: 60px;
+}
+
+#help{
+    margin-top: 70px;
+    text-align: center;
+}
+
+#help-img{
+    width: 100px;
+    height: 70px;
+}
+
+#over{
+    margin-top: 100px;
+    text-align: center;
+}
+
+#over-img{
+    width: 260px;
+    height: 60px;
+    
+}
+
+
+
+
+
+#end-screen{
+    background-image: url("../img/bg.png");
+    background-repeat: no-repeat;
+    background-size:cover;
+    width: 500px;
+    height: 580px;
+    position: absolute;
+    background-position: center;
+    margin-left: 450px;
+    display: none;
+}
+

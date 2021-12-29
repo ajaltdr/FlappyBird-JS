@@ -1,9 +1,7 @@
-
-
 const canvas = document.getElementById('canvas');
 const ct = canvas.getContext('2d');
 
-canvas.height = window.innerHeight;
+canvas.height = window.innerHeight-5;
 canvas.width = window.innerWidth;
 
 const screenWidth = 500;
@@ -13,22 +11,41 @@ const screenLeftEdge = 450;
 const screenRightEdge = 450 + screenWidth;
 const midScreen = screenLeftEdge+(screenWidth /2)
 
-console.log(midScreen)
-
 const pipeDown = new Image();
 const pipeUp = new Image();
 
 const pipeHeight = 300;
 
 const gap = 120;
-const c = pipeHeight + gap;
+const pipeUpPosition = pipeHeight + gap;
 
 var birdYPosition = 350;
 var birdXPosition =  600;
 
 var gravity = 1.5;
+var spaceSensitivity = 50;
+
+var score = 0;
+
+let gamePaused = true;
 
 
+const startBtn = document.getElementById("start-btn");
+const restartBtn = document.getElementById("restart-btn");
+const startScreen = document.getElementById("start-screen");
+const endScreen = document.getElementById("end-screen");
+
+startBtn.addEventListener('click', () => {
+    gamePaused = false;
+    startScreen.style.display="none";
+    canvas.style.display="initial"
+    generateEverything();
+  });
+
+  restartBtn.addEventListener('click', () => {
+    gamePaused = false;
+    location.reload();
+  });
 
 function generateBackground(){
 
@@ -75,37 +92,44 @@ pipe[0] = {
             
 
             pipeUp.src = 'img/pipe-up.png';
-                var pipeUpHeight = screenHeight - (c+120+pipe[i].y);
-                ct.drawImage(pipeUp,pipe[i].x,pipe[i].y+c,50,pipeUpHeight);
-
-            
+                var pipeUpHeight = screenHeight - (pipeUpPosition+120+pipe[i].y);
+                ct.drawImage(pipeUp,pipe[i].x,pipe[i].y+pipeUpPosition,50,pipeUpHeight);
 
             // Checks if the pipe reaches the edge
             if (pipe[i].x!=screenLeftEdge){
                 pipe[i].x--;
             }
             else pipe[i]=-1
+            
+            if (pipe[i].x ==580){
+                score++;
+            }
 
             // Adds another pipes 
-            if (pipe[i].x == midScreen)
+            if (pipe[i].x == midScreen){
                     pipe.push({
                         x: screenRightEdge-50,
                         y: getRandom(pipeHeight) - pipeDown.height
                     })  
+            }
 
-                    
-                        if (birdXPosition + 50 >= pipe[i].x && birdXPosition <= pipe[i].x + 50 && (birdYPosition <= pipe[i].y + pipeHeight || birdYPosition+40 >= pipe[i].y+c) || birdYPosition + 40 >= canvas.height-120){
-                            location.reload();
-                    
-                    }
-                             
+            const collides = birdXPosition + 50 >= pipe[i].x && birdXPosition <= pipe[i].x + 50 && (birdYPosition <= pipe[i].y + pipeHeight || birdYPosition+40 >= pipe[i].y+pipeUpPosition) || birdYPosition + 40 >= canvas.height-120;
+                if (collides){
+                    let gamePaused = true;
+                    gameOver();
+                }                 
         }
-        
     }
 
-document.addEventListener('keyup', event => {
-    if (event.code === 'Space') {
-      birdYPosition -= 50;
+    function displayScore(){
+        ct.fillStyle = "black";
+        ct.font = "50px Verdana"
+        ct.fillText(score,midScreen,50);
+    }
+
+document.addEventListener('keyup', e => {
+    if (e.code === 'Space') {
+      birdYPosition -= spaceSensitivity;
      
     }
   })
@@ -117,8 +141,19 @@ document.addEventListener('keyup', event => {
         generateBird();
         generatePipe();
         generateGround();
-
+        displayScore();
         requestAnimationFrame(generateEverything);
 }
 
-generateEverything();
+function gameOver(){
+    gamePaused=true;
+    startScreen.style.display="none";
+    endScreen.style.display="initial";
+    canvas.style.display="none";
+    score=0;
+    birdYPosition = 350;
+    birdXPosition =  600;
+    x=screenRightEdge-50;
+    y=0;
+}
+
