@@ -4,37 +4,45 @@ const ct = canvas.getContext('2d');
 canvas.height = window.innerHeight-5;
 canvas.width = window.innerWidth;
 
+// Game Screen resolution
 const screenWidth = 500;
 const screenHeight = canvas.height;
 
+// Game Screen Edges Position
 const screenLeftEdge = 450;
 const screenRightEdge = 450 + screenWidth;
 const midScreen = screenLeftEdge+(screenWidth /2)
 
+// Pipes representations
 const pipeDown = new Image();
 const pipeUp = new Image();
 
+// pipeDown Height
 const pipeHeight = 300;
 
-const gap = 120;
-const pipeUpPosition = pipeHeight + gap;
+// Space between two pipes
+const space = 120;
+const pipeUpPosition = pipeHeight + space;
 
+// Position of Bird
 var birdYPosition = 350;
 var birdXPosition =  600;
 
-var gravity = 1.5;
+// Game Constants
+var freeFall = 1.5;
 var spaceSensitivity = 50;
 
 var score = 0;
 
 let gamePaused = true;
 
-
+// Get Elements from HTML
 const startBtn = document.getElementById("start-btn");
 const restartBtn = document.getElementById("restart-btn");
 const startScreen = document.getElementById("start-screen");
 const endScreen = document.getElementById("end-screen");
 
+// Onclick function for Start
 startBtn.addEventListener('click', () => {
     gamePaused = false;
     startScreen.style.display="none";
@@ -42,11 +50,13 @@ startBtn.addEventListener('click', () => {
     generateEverything();
   });
 
+  // Onclick function for Re-Start
   restartBtn.addEventListener('click', () => {
     gamePaused = false;
     location.reload();
   });
 
+  // Generate Backgroud 
 function generateBackground(){
 
     const bg = new Image();
@@ -56,6 +66,7 @@ function generateBackground(){
     }
 }
 
+    // Generate Ground
 function generateGround(){
     const ground = new Image();
     ground.src='img/ground.png';
@@ -63,16 +74,17 @@ function generateGround(){
         ct.drawImage(ground,450,canvas.height-120,screenWidth,120);
     }
 }
-
+    // Generate Bird 
 function generateBird(){
     const bird = new Image();
     bird.src='img/bird.png';
     bird.onload = () =>{
         ct.drawImage(bird,birdXPosition,birdYPosition,50,40);
-        birdYPosition += gravity;
+        birdYPosition += freeFall;
     }
 }
 
+ // Generate Random number for pipe y position
 function getRandom(pipeHeight) {
     let random = Math.floor(Math.random() * pipeDown.height);
     return random;
@@ -84,6 +96,7 @@ pipe[0] = {
     x: screenRightEdge-50,
     y: 0
 }
+    // Generate Pipes 
     function generatePipe(){
         for(var i = 0; i < pipe.length; i++){
             pipeDown.src = 'img/pipe-down.png';
@@ -102,8 +115,10 @@ pipe[0] = {
             else pipe[i]=-1
             
             if (pipe[i].x ==580){
-                score++;
-            }
+                if (gamePaused!= true){
+                    score++;
+                }    
+            }   
 
             // Adds another pipes 
             if (pipe[i].x == midScreen){
@@ -121,12 +136,14 @@ pipe[0] = {
         }
     }
 
+    // Displays score during game
     function displayScore(){
         ct.fillStyle = "black";
         ct.font = "50px Verdana"
         ct.fillText(score,midScreen,50);
     }
 
+    // On Space Pressed
 document.addEventListener('keyup', e => {
     if (e.code === 'Space') {
       birdYPosition -= spaceSensitivity;
@@ -134,6 +151,7 @@ document.addEventListener('keyup', e => {
     }
   })
 
+  // Starts the game
  function generateEverything(){
 
 
@@ -145,12 +163,19 @@ document.addEventListener('keyup', e => {
         requestAnimationFrame(generateEverything);
 }
 
+const gameScore = document.getElementById("score");
+
+// Ends the game
 function gameOver(){
     gamePaused=true;
     startScreen.style.display="none";
     endScreen.style.display="initial";
     canvas.style.display="none";
-    score=0;
+
+    gameScore.innerText = score;
+
+    //Resetting everything
+    
     birdYPosition = 350;
     birdXPosition =  600;
     x=screenRightEdge-50;
